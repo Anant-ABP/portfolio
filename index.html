@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anant Panjari Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #000; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0; position: relative; }
+
+    /* Starfield canvas */
+    #starfield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; background: #000; }
+    .content-wrapper { position: relative; z-index: 1; }
+
+    /* Section cards */
+    .section-card { background: linear-gradient(to bottom right, #1a0033, #4b0082); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 900px; }
+    .section-title { text-align: center; margin-bottom: 20px; font-weight: bold;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
+
+    /* Hero */
+    .hero { background: linear-gradient(to bottom right, #1a0033, #4b0082); border-radius: 10px; margin: 90px auto 20px auto; padding: 40px 20px; max-width: 900px; display: flex; justify-content: space-between; align-items: center;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
+    .hero-text h2 { color: #ff66ff; }
+    .animated-name { font-weight: bold; background: linear-gradient(90deg, #8a2be2, #ffffff, #8a2be2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: shine 3s linear infinite; }
+    @keyframes shine { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
+
+    .profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 24%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .profile-photo:hover { transform: scale(1.8); }
+
+    /* Social icons */
+    .social-container { background: linear-gradient(to right, #1a0033, #6a0dad); border-radius: 30px; padding: 10px 20px; text-align: center; margin: 20px auto; display: inline-block; max-width: 400px;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
+    .social-container a { color: #fff; font-size: 18px; margin: 0 10px; }
+    .social-container a:hover { color: #ff66ff; }
+
+    /* Projects */
+    #projects {
+      margin-bottom: 60px;
+      box-shadow: 0 0 20px rgba(128,0,255,0.6);
+    }
+    
+    .project-images img {
+      background: #999;
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease; /* smooth zoom */
+      cursor: pointer;
+    }
+    
+    .project-images img:hover {
+      transform: scale(1.4); /* zoom effect */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* optional shadow */
+      z-index: 2;
+    }
+    /* Skills */
+    #skills {
+      box-shadow: 0 0 20px rgba(128,0,255,0.6); /* same as projects & certificates */
+    }
+    
+    .skills-icons { text-align: center; }
+    .skills-icons img { width: 60px; margin: 10px; }
+    .soft-skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+
+    /* Certificates new design */
+    .certificate-container {
+      background: linear-gradient(180deg, #2e004f, #5b00a0);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 700px;
+      margin: 40px auto;
+      color: white;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(128,0,255,0.6);
+    }
+    #certificates {
+      margin-top: 80px; /* push Certificates lower */
+    }
+    
+    .certificate-container {
+      max-width: 900px; /* make same width as Skills */
+    }
+
+    .certificate-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .certificate-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .certificate-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .certificate-list span {
+      flex: 1;
+      text-align: left;
+      margin-right: 15px;
+    }
+    
+    .btn-view {
+      background: #9b30ff;
+      color: white;
+      padding: 6px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    
+    .btn-view:hover {
+      background: #bf00ff;
+    }
+
+
+    /* Contact */
+    .btn-submit { background: linear-gradient(to right, #6a0dad, #ff00ff); border: none; color: #fff; padding: 10px 30px; border-radius: 20px; }
+    .custom-input { height: 35px; font-size: 14px; padding: 5px 10px; }
+    .custom-textarea { font-size: 14px; padding: 8px 10px; resize: none; }
+
+    section { padding-top: 50px; }
+    .footer {
+  background: #111; /* Dark background */
+  color: #fff;
+  padding: 20px 0;
+  font-size: 15px;
+}
+
+.footer i {
+  margin-right: 8px;
+  color: #fff;
+}
+
+.footer p {
+  margin: 5px 0;
+}
+
+.footer .made-by {
+  font-size: 16px;
+}
+
+.footer .made-by .name {
+  color: #ffffff; /* Purple text like in your screenshot */
+  font-weight: 500;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Starfield -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Content -->
+  <div class="content-wrapper">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-text">
+        <h3><span class="animated-name">Hi! Anant Panjari Here!</span></h3>
+        <p>Hi! I am a Level Designer. My work is to design <br>
+          the level of games which makes players to play<br>
+          the game more and more.</p>
+      </div>
+      <img src="photos/anant1.jpg" alt="Anant Panjari" class="profile-photo">
+    </section>
+
+    <!-- Social Icons -->
+    <div class="text-center">
+      <div class="social-container">
+        <a href="https://www.linkedin.com/in/anant-panjari-849652225/" target="_blank"><i class="fab fa-linkedin"></i></a>
+        <a href="https://www.instagram.com/anant_abp07/" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://github.com/Anant-ABP" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100080064232413" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="https://x.com/abp_anant28" target="_blank"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://www.youtube.com/@anantabp6467" target="_blank"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section-card">
+      <h3 class="section-title">Projects</h3>
+      <h6>Galaxy Shooter :</h6>
+      <p>In the Unknown planet where the astronaut got stuck and need to fight the enemies
+         to get outside the planet. It's a mini game just for sample.</p>
+      <div class="row project-images mb-4">
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 092240.png" alt="Space Shooter"></div>
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 092326.png" alt="Space Shooter"></div>
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 092411.png" alt="Space Shooter"></div>
+      </div>
+      <h6>Rocket Launcher :</h6>
+      <p>A Simple 2D game where you need to clear levels with minimum damage, where precision
+         is needed to clear some levels.</p>
+      <div class="row project-images">
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 091546.png" alt="Rocket launcher"></div>
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 091654.png" alt="Rocket launcher"></div>
+        <div class="col-md-4"><img src="photos/Screenshot 2025-09-21 091757.png" alt="Rocket launcher"></div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section-card" >
+      <h3 class="section-title">Technical Skills</h3>
+      <div class="d-flex justify-content-center gap-5 mb-5">
+        <div class="text-center">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="60">
+          <div>Java</div>
+        </div>
+        <div class="text-center">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="60">
+          <div>Python</div>
+        </div>
+        <div class="text-center">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" width="60">
+          <div>C#</div>
+        </div>
+        <div class="text-center">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="figma" width="60">
+          <div>Figma</div>
+        </div>
+      </div>
+
+      <h3 class="section-title mt-4">Soft Skills</h3>
+      <div class="soft-skills">
+        <span>• English</span>
+        <span>• Gamer</span>
+        <span>• Level Designer</span>
+        <span>• Gujarati</span>
+        <span>• Communication</span>
+        <span>• Unity 3D</span>
+        <span>• UI/UX</span>
+      </div>
+    </section>
+        <!-- Certificates Section -->
+    <section id="certificates" class="certificate-container">
+      <h3 class="section-title">Certificates</h3>
+      <ul class="certificate-list">
+        <li>
+          <span>joy of learning python</span>
+          <a href="https://media.licdn.com/dms/image/v2/D5622AQEAgE7h5qPc2A/feedshare-shrink_1280/feedshare-shrink_1280/0/1726932392784?e=1761177600&v=beta&t=kKD_hzZnrDZok3SUMynwaL819rcMR-zGnAOaI2Yo7-s" target="_blank" class="btn-view">View</a>
+        </li>
+        <li>
+          <span>Build 5 playable 3D games in Unity 6 using C#. Learn real coding skills and master core game dev techniques.</span>
+          <a href="https://example.com/unity" target="_blank" class="btn-view">View</a>
+        </li>
+        <li>
+          <span>A Step-by-Step Guide for Beginners to Design Web & Mobile Projects in Figma</span>
+          <a href="https://example.com/figma" target="_blank" class="btn-view">View</a>
+        </li>
+      </ul>
+    </section>
+
+
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <div class="container my-5" style="max-width: 700px;">
+        <div class="p-5 rounded" style="background-color:#1a1a1a; color:#f5f5f5;">
+          <h2 class="mb-4">Contact Me</h2>
+          <form id="contactForm" action="https://formspree.io/f/xovngbja" method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control w-50 custom-input" name="name" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control w-50 custom-input" name="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control w-50 custom-textarea" name="message" id="message" rows="4" placeholder="Your message" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="container text-center text-md-start">
+    <div class="row">
+      <!-- Contact Info -->
+      <div class="col-md-12">
+        <p>
+          <i class="fa fa-phone"></i> Contact number: +91 962-480-6484</p>
+          <p>
+          <i class="fa fa-envelope"></i> Email: anantpanjari@gmail.com
+        </p>
+        <p>
+          <i class="fa fa-map-marker"></i> Address: Ashopalav Society GIDC Main Road, Porbandar, 360575
+        </p>
+      </div>
+    </div>
+
+    <!-- Made By -->
+    <div class="text-center mt-3">
+      <img src="photos/Straw Hat Pirates.jpg" alt="Logo" width="40" class="me-2">
+      <span class="made-by">Made By <span class="name">Anant Panjari</span></span>
+    </div>
+  </div>
+</footer>
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Starfield + Meteoroids -->
+  <script>
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+
+    let stars = [], meteoroids = [];
+    const numStars = 150, numMeteoroids = 5;
+    let baseSpeed = 2; // Base speed for consistent animation
+
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i=0; i<numStars; i++) {
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        radius: Math.random()*1.5+0.5,
+        speed: Math.random()*0.5+0.1,
+        opacity: Math.random()
+      });
+    }
+
+    // Initialize meteoroids with consistent speed
+    function initMeteoroids() {
+      meteoroids = [];
+      for (let i=0; i<numMeteoroids; i++) {
+        // Create meteoroids from various positions including middle
+        const startX = Math.random() * canvas.width;
+        meteoroids.push({
+          x: startX,
+          y: -Math.random()*50, // Start above the screen
+          length: Math.random()*20+10,
+          speed: baseSpeed + Math.random(), // Use base speed with slight variation
+          opacity: Math.random()*0.5+0.5,
+          // Add angle for more natural falling direction
+          angle: Math.random() * 0.5 + 0.3 // Between 0.3 and 0.8 radians
+        });
+      }
+    }
+    
+    initMeteoroids();
+
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // Draw stars
+      stars.forEach(s=>{
+        s.x+=s.speed;
+        if(s.x>canvas.width) s.x=0;
+        s.opacity += (Math.random()-0.5)*0.05;
+        if(s.opacity<0.3) s.opacity=0.3;
+        if(s.opacity>1) s.opacity=1;
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.radius,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,255,255,${s.opacity})`;
+        ctx.fill();
+      });
+
+      // Draw meteoroids
+      meteoroids.forEach(m=>{
+        // Update position based on consistent speed and angle
+        m.x += m.speed * Math.cos(m.angle);
+        m.y += m.speed * Math.sin(m.angle);
+        
+        // Reset if out of bounds
+        if(m.x>canvas.width || m.y>canvas.height || m.x < -20) {
+          // Start from various positions including middle of the top
+          m.x = Math.random() * canvas.width;
+          m.y = -Math.random()*50;
+          m.length = Math.random()*20+10;
+          m.speed = baseSpeed + Math.random(); // Consistent speed
+          m.opacity = Math.random()*0.5+0.5;
+          m.angle = Math.random() * 0.5 + 0.3; // Random angle between 0.3 and 0.8 radians
+        }
+        
+        // Draw the meteoroid
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(m.x - m.length * Math.cos(m.angle), m.y - m.length * Math.sin(m.angle));
+        ctx.strokeStyle=`rgba(255,255,255,${m.opacity})`;
+        ctx.lineWidth=2;
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // Reinitialize meteoroids when window is resized
+    window.addEventListener('resize', function() {
+      resizeCanvas();
+      initMeteoroids();
+    });
+
+    animate();
+  </script>
+
+</body>
+</html>
