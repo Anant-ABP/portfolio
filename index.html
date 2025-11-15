@@ -258,7 +258,7 @@ body {
     left:0; 
     width:100%; 
     height:100%; 
-    z-index: 1; /* Changed from 0.5 to 1 */
+    z-index: 1;
     pointer-events:none; 
 }
 
@@ -269,7 +269,7 @@ body {
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <!-- Spaceships 3D Canvas -->
-<canvas id="spaceshipCanvas" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:0.5; pointer-events:none;"></canvas>
+<canvas id="spaceshipCanvas"></canvas>
 
   <!-- Content -->
   <div class="content-wrapper">
@@ -678,30 +678,31 @@ directionalLight.position.set(100, 200, 300);
 scene.add(directionalLight);
 
 // Create simple geometry as fallback since models are missing
-function createSimpleShip(color = 0x8888ff) {
+function createSimpleShip(color = 0x4488ff) {
     const group = new THREE.Group();
     
-    // Simple ship geometry (triangle)
-    const geometry = new THREE.ConeGeometry(8, 20, 3);
+    // Larger ship geometry
+    const geometry = new THREE.ConeGeometry(15, 35, 3); // Increased size
     const material = new THREE.MeshPhongMaterial({ 
         color: color,
-        shininess: 100 
+        shininess: 100,
+        emissive: 0x222266 // Add glow effect
     });
     const ship = new THREE.Mesh(geometry, material);
     ship.rotation.x = Math.PI; // Point forward
     
     group.add(ship);
     
-    // Add some wings
-    const wingGeometry = new THREE.BoxGeometry(15, 2, 5);
+    // Add some wings (larger)
+    const wingGeometry = new THREE.BoxGeometry(25, 3, 8);
     const wing1 = new THREE.Mesh(wingGeometry, material);
-    wing1.position.y = -5;
-    wing1.position.x = 8;
+    wing1.position.y = -8;
+    wing1.position.x = 12;
     wing1.rotation.z = Math.PI / 6;
     
     const wing2 = new THREE.Mesh(wingGeometry, material);
-    wing2.position.y = -5;
-    wing2.position.x = -8;
+    wing2.position.y = -8;
+    wing2.position.x = -12;
     wing2.rotation.z = -Math.PI / 6;
     
     group.add(wing1);
