@@ -32,7 +32,7 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
-    .profile-photo:hover { transform: scale(1.8); }
+    .profile-photo:hover { transform: scale(1.6); }
 
     /* Social icons */
     .social-container { background: linear-gradient(to right, #1a0033, #6a0dad); border-radius: 30px; padding: 10px 20px; text-align: center; margin: 20px auto; display: inline-block; max-width: 400px;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
@@ -86,9 +86,14 @@
       max-width: 900px; /* make same width as Skills */
     }
     #projects .certificate-item {
+      list-style: none;
       padding: 12px 0;
-      margin: 10px 0;
+      margin: 0 0;
     }
+    #projects .certificate-item .cert-title {
+      padding-left: 5px;
+    }
+
     .certificate-list {
       list-style: none;
       padding: 20px;
@@ -196,15 +201,15 @@
     <section id="projects" class="section-card">
       <h3 class="section-title">Projects</h3>
       <br>
-      <h6>Survive :</h6>
-      <p>A first person survival Horror game where the player is stucked inside 
-        a old house and to escape from the house he need to find all six digit code.</p>
+      <h3>Survive :</h3>
+      <h6>A first person survival Horror game where the player is stucked inside 
+        a old house and to escape from the house he need to find all six digit code.</h6>
       <div class="row project-images mb-4">
         <div class="col-md-4"><img src="photos/survive-1.png" alt="Space Shooter"></div>
         <div class="col-md-4"><img src="photos/survive-2.png" alt="Space Shooter"></div>
         <div class="col-md-4"><img src="photos/survive-3.png" alt="Space Shooter"></div>
       </div>
-      <br>
+      
       <li class="certificate-item">
   <span class="cert-title">You can download the game here 👉</span>
 
@@ -214,11 +219,11 @@
 </li>
 <br>
 <br>
-      <h6>The Mysterious Temple :</h6>
-      <p>It's a first person puzzle, Exploration, horror and Survival game where there is a Detective 
+      <h3>The Mysterious Temple :</h3><br>
+      <h6>It's a first person puzzle, Exploration, horror and Survival game where there is a Detective 
         who enters the temple area to uncover the truth behind the temple but unfortunatly he got trapped 
         inside but still he continous his search for the truth and got in problems with the cursed spirits.
-        In order to Survive he need to move forward and defeat the spirits.</p><br>
+        In order to Survive he need to move forward and defeat the spirits.</h6><br>
       <div class="row project-images">
         <div class="col-md-4"><img src="photos/TMT-1.png" alt="The Mysterious Temple"></div>
         <div class="col-md-4"><img src="photos/TMT-2.png" alt="The Mysterious Temple"></div>
