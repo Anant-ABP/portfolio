@@ -252,7 +252,15 @@ body {
 #starfield {
   transform: translateY(calc(var(--scrollY) * 0.15));
 }
-
+#spaceshipCanvas { 
+    position: fixed; 
+    top:0; 
+    left:0; 
+    width:100%; 
+    height:100%; 
+    z-index: 1; /* Changed from 0.5 to 1 */
+    pointer-events:none; 
+}
 
   </style>
 </head>
@@ -648,96 +656,136 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.m
 import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
 
 const shipCanvas = document.getElementById("spaceshipCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas: shipCanvas, alpha: true });
+const renderer = new THREE.WebGLRenderer({ 
+    canvas: shipCanvas, 
+    alpha: true,
+    antialias: true 
+});
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit for performance
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
 camera.position.z = 500;
 
-const light = new THREE.DirectionalLight(0xffffff, 3);
-light.position.set(100, 200, 300);
-scene.add(light);
+// Better lighting
+const ambientLight = new THREE.AmbientLight(0x404040, 2);
+scene.add(ambientLight);
 
-// MODEL PATHS
-const shipModels = [
-  "models/raven.glb",
-  "models/harbinger.glb"
-];
+const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+directionalLight.position.set(100, 200, 300);
+scene.add(directionalLight);
 
-const loader = new GLTFLoader();
+// Create simple geometry as fallback since models are missing
+function createSimpleShip(color = 0x8888ff) {
+    const group = new THREE.Group();
+    
+    // Simple ship geometry (triangle)
+    const geometry = new THREE.ConeGeometry(8, 20, 3);
+    const material = new THREE.MeshPhongMaterial({ 
+        color: color,
+        shininess: 100 
+    });
+    const ship = new THREE.Mesh(geometry, material);
+    ship.rotation.x = Math.PI; // Point forward
+    
+    group.add(ship);
+    
+    // Add some wings
+    const wingGeometry = new THREE.BoxGeometry(15, 2, 5);
+    const wing1 = new THREE.Mesh(wingGeometry, material);
+    wing1.position.y = -5;
+    wing1.position.x = 8;
+    wing1.rotation.z = Math.PI / 6;
+    
+    const wing2 = new THREE.Mesh(wingGeometry, material);
+    wing2.position.y = -5;
+    wing2.position.x = -8;
+    wing2.rotation.z = -Math.PI / 6;
+    
+    group.add(wing1);
+    group.add(wing2);
+    
+    return group;
+}
 
 function spawnShip(direction = "leftToRight") {
-  const modelPath = shipModels[Math.floor(Math.random() * shipModels.length)];
-
-  loader.load(modelPath, (gltf) => {
-    const ship = gltf.scene;
-    ship.scale.set(20, 20, 20);
-
+    // Use simple geometry since models are missing
+    const ship = createSimpleShip();
+    
     const randomY = Math.random() * 400 - 200;
+    const randomZ = Math.random() * 200 - 400; // Vary depth
 
     let startX, endX;
 
     if (direction === "leftToRight") {
-      startX = -800;
-      endX = 800;
+        startX = -1000;
+        endX = 1000;
     } else {
-      startX = 800;
-      endX = -800;
-      ship.rotation.y = Math.PI;
+        startX = 1000;
+        endX = -1000;
+        ship.rotation.y = Math.PI; // Rotate to face direction
     }
-    loader.load(modelPath,
-  (gltf) => {
-    console.log("Loaded model:", modelPath);
-    // rest of code
-  },
-  undefined,
-  (error) => {
-    console.error("Error loading model:", modelPath, error);
-  }
-);
 
-    ship.position.set(startX, randomY, -300);
+    ship.position.set(startX, randomY, randomZ);
     scene.add(ship);
 
-    const speed = 1 + Math.random() * 1.5;
+    const speed = 2 + Math.random() * 2;
+    const bobSpeed = Math.random() * 0.002 + 0.001;
+    const bobHeight = Math.random() * 0.5 + 0.2;
 
     function animateShip() {
-      ship.position.x += direction === "leftToRight" ? speed : -speed;
-      ship.position.y += Math.sin(Date.now() * 0.005) * 0.3;
+        ship.position.x += direction === "leftToRight" ? speed : -speed;
+        
+        // Gentle bobbing motion
+        ship.position.y += Math.sin(Date.now() * bobSpeed) * bobHeight;
+        
+        // Gentle rocking
+        ship.rotation.z = Math.sin(Date.now() * bobSpeed * 0.5) * 0.1;
 
-      if ((direction === "leftToRight" && ship.position.x >= endX) ||
-          (direction === "rightToLeft" && ship.position.x <= endX)) {
+        if ((direction === "leftToRight" && ship.position.x >= endX) ||
+            (direction === "rightToLeft" && ship.position.x <= endX)) {
+            scene.remove(ship);
+            return;
+        }
 
-        scene.remove(ship);
-        return;
-      }
-
-      requestAnimationFrame(animateShip);
+        requestAnimationFrame(animateShip);
     }
 
     animateShip();
-  });
 }
 
+// Spawn ships at intervals
 setInterval(() => {
-  spawnShip("leftToRight");
-  spawnShip("rightToLeft");
-}, 2000);
+    if (Math.random() > 0.5) {
+        spawnShip("leftToRight");
+    } else {
+        spawnShip("rightToLeft");
+    }
+}, 3000); // Spawn every 3 seconds
+
+// Initial spawn
+for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+        spawnShip(i % 2 === 0 ? "leftToRight" : "rightToLeft");
+    }, i * 1000);
+}
 
 function renderLoop() {
-  renderer.render(scene, camera);
-  requestAnimationFrame(renderLoop);
+    renderer.render(scene, camera);
+    requestAnimationFrame(renderLoop);
 }
 renderLoop();
 
 window.addEventListener("resize", () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 });
+
+// Debug info
+console.log("Spaceship system initialized - using procedural ships");
 </script>
 
 
