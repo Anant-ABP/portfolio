@@ -35,7 +35,7 @@
     .profile-photo:hover { transform: scale(1.6); }
 
     /* Social icons */
-    .social-container { background: linear-gradient(to right, #1a0033, #6a0dad); border-radius: 30px; padding: 10px 20px; text-align: center; margin: 20px auto; display: inline-block; max-width: 400px;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
+    .social-container { background: linear-gradient(to right, #1a0033, #6a0dad); border-radius: 30px; padding: 10px 20px; text-align: center; margin: 20px auto; display: inline-block;display: flex;justify-content: center; gap: 25px; max-width: 600px;width: 90%;padding: 15px 25px;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
     .social-container a { color: #fff; font-size: 18px; margin: 0 10px; }
     .social-container a:hover { color: #ff66ff; }
 
@@ -119,6 +119,49 @@
       margin-right: 15px;
     }
     
+    /* Achievements Section - Fixed to match Skills section style */
+    .achievement-container {
+      background: linear-gradient(to bottom right, #1a0033, #4b0082);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 45px auto;
+      max-width: 900px;
+      box-shadow: 0 0 20px rgba(128,0,255,0.6);
+    }
+    
+    .achievement-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+    
+    .achievement-text {
+      flex: 1;
+    }
+    
+    .achievement-text ul {
+      padding-left: 20px;
+    }
+    
+    .achievement-text li {
+      margin-bottom: 10px;
+      line-height: 1.5rem;
+    }
+    
+    .achievement-img {
+      width: 220px;
+      height: 180px;
+      background: #444;
+      border-radius: 12px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(128, 0, 255, 0.5);
+    }
+    .achievement-img:hover { transform: scale(1.6); }
+
+    
     .btn-view {
       background: #9b30ff;
       color: white;
@@ -164,6 +207,51 @@
   color: #ffffff; /* Purple text like in your screenshot */
   font-weight: 500;
 }
+/* Scroll Reveal Animation */
+.reveal {
+  opacity: 0;
+  transform: scale(1.1);
+  transition: all 0.50s ease-out;
+
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: scale(1);
+}
+/* ===== PARALLAX EFFECTS ===== */
+
+/* Section parallax slow upward motion */
+.parallax-section {
+  transform: translateY(40px);
+  transition: transform 0.65s ease-out;
+
+}
+
+.parallax-section.active {
+  transform: translateY(0px);
+}
+
+/* Image parallax (slides up slightly) */
+.parallax-img {
+  transform: translateY(30px);
+  transition: transform 0.75s ease-out;
+
+}
+
+.parallax-img.active {
+  transform: translateY(0px);
+}
+
+/* Background parallax */
+body {
+  --scrollY: 0px;
+}
+
+#starfield {
+  transform: translateY(calc(var(--scrollY) * 0.15));
+}
+
 
   </style>
 </head>
@@ -178,8 +266,8 @@
     <section id="home" class="hero">
       <div class="hero-text">
         <h3><span class="animated-name">Hi! Anant Panjari Here!</span></h3>
-        <p>Hi! I am a Level Designer. My work is to design <br>
-          the level of games. and I am a UI/UX Designer.<br>
+        <p>Hi! I am a passionate Level Designer and UI/UX Designer.  
+          I create engaging and immersive game levels with a strong focus on user experience.</p>
           </p>
       </div>
       <img src="photos/anant.png" alt="Anant Panjari" class="profile-photo">
@@ -198,7 +286,7 @@
     </div>
 
     <!-- Projects Section -->
-    <section id="projects" class="section-card">
+    <section id="projects" class="section-card reveal">
       <h3 class="section-title">Projects</h3>
       <br>
       <h3>Survive :</h3>
@@ -240,9 +328,29 @@
 <br>
 <br>
     </section>
+    
+    <!-- Achievements Section - Fixed to match Skills section style -->
+    <section id="achievements" class="achievement-container reveal parallax-section">
+      <h3 class="section-title">Achievements</h3>
+      
+      <!-- Content area with text and image -->
+      <div class="achievement-content">
+        <div class="achievement-text">
+          <ul>
+            <li>I've been Participated in the Game Jam Called "Scream jam 2025".</li>
+            <li>There were total 7,499(approx.) Participated</li>
+            <li>And which only 956 submitted the Game</li>
+            <li>Out of which I Ranked 464 out of 956 submissions.</li>
+          </ul>
+        </div>
+      
+        <!-- Right side image placeholder -->
+        <img src="photos/achievement.png" class="achievement-img parallax-img">
+      </div>
+    </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="section-card" >
+    <section id="skills" class="section-card reveal">
       <h3 class="section-title">Technical Skills</h3>
       <div class="d-flex justify-content-center gap-5 mb-5">
         <div class="text-center">
@@ -279,7 +387,7 @@
       </div>
     </section>
         <!-- Certificates Section -->
-    <section id="certificates" class="certificate-container">
+    <section id="certificates" class="certificate-container reveal parallax-section">
       <h3 class="section-title">Certificates</h3>
       <ul class="certificate-list">
         <li>
@@ -304,7 +412,8 @@
 
 
     <!-- Contact Section -->
-    <section id="contact">
+    <section id="contact" class="reveal parallax-section">
+
       <div class="container my-5" style="max-width: 700px;">
         <div class="p-5 rounded" style="background-color:#1a1a1a; color:#f5f5f5;">
           <h2 class="mb-4">Contact Me</h2>
@@ -451,6 +560,40 @@
     });
 
     animate();
+  </script>
+  <script>
+    const revealElements = document.querySelectorAll('.reveal');
+  
+    const revealOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.15 });
+  
+    revealElements.forEach(el => revealOnScroll.observe(el));
+  </script>
+  <script>
+    /* ===== SECTION & IMAGE PARALLAX ===== */
+    const parallaxSections = document.querySelectorAll('.parallax-section');
+    const parallaxImages = document.querySelectorAll('.parallax-img');
+  
+    const parallaxObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.2 });
+  
+    parallaxSections.forEach(sec => parallaxObserver.observe(sec));
+    parallaxImages.forEach(img => parallaxObserver.observe(img));
+  
+    /* ===== BACKGROUND PARALLAX ===== */
+    window.addEventListener("scroll", () => {
+      document.body.style.setProperty('--scrollY', window.scrollY);
+    });
   </script>
 
 </body>
