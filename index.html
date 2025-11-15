@@ -20,7 +20,8 @@
 
     /* Hero */
     .hero { background: linear-gradient(to bottom right, #1a0033, #4b0082); border-radius: 10px; margin: 90px auto 20px auto; padding: 40px 20px; max-width: 900px; display: flex; justify-content: space-between; align-items: center;box-shadow: 0 0 20px rgba(128,0,255,0.6); }
-    .hero-text h2 { color: #ff66ff; }
+    .hero-text h2 { color: #ff66ff;}
+    .hero-text p {max-width: 520px;line-height: 1.5;}
     .animated-name { font-weight: bold; background: linear-gradient(90deg, #8a2be2, #ffffff, #8a2be2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: shine 3s linear infinite; }
     @keyframes shine { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
 
@@ -159,7 +160,7 @@
       cursor: pointer;
       box-shadow: 0 0 10px rgba(128, 0, 255, 0.5);
     }
-    .achievement-img:hover { transform: scale(1.6); }
+    .achievement-img:hover { transform: scale(1.4); }
 
     
     .btn-view {
@@ -259,6 +260,8 @@ body {
 
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
+  <!-- Spaceships 3D Canvas -->
+<canvas id="spaceshipCanvas" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:0.5; pointer-events:none;"></canvas>
 
   <!-- Content -->
   <div class="content-wrapper">
@@ -345,7 +348,7 @@ body {
         </div>
       
         <!-- Right side image placeholder -->
-        <img src="photos/achievement.png" class="achievement-img parallax-img">
+        <img src="photos/achievement.png" class="achievement-img">
       </div>
     </section>
 
@@ -419,15 +422,18 @@ body {
           <form id="contactForm" action="https://formspree.io/f/xovngbja" method="POST">
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control w-50 custom-input" name="name" id="name" placeholder="Enter your name" required>
+              <input type="text" class="form-control w-50 custom-input" name="name" id="name" placeholder="Enter your name">
+              <small class="error-text text-danger"></small>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control w-50 custom-input" name="email" id="email" placeholder="Enter your email" required>
+              <input type="email" class="form-control w-50 custom-input" name="email" id="email" placeholder="Enter your email">
+              <small class="error-text text-danger"></small>
             </div>
             <div class="mb-3">
               <label for="message" class="form-label">Message</label>
-              <textarea class="form-control w-50 custom-textarea" name="message" id="message" rows="4" placeholder="Your message" required></textarea>
+              <textarea class="form-control w-50 custom-textarea" name="message" id="message" rows="4" placeholder="Your message" ></textarea>
+              <small class="error-text text-danger"></small>
             </div>
             <button type="submit" class="btn btn-submit">Submit</button>
           </form>
@@ -453,7 +459,6 @@ body {
 
     <!-- Made By -->
     <div class="text-center mt-3">
-      <img src="photos/Straw Hat Pirates.jpg" alt="Logo" width="40" class="me-2">
       <span class="made-by">Made By <span class="name">Anant Panjari</span></span>
     </div>
   </div>
@@ -594,6 +599,137 @@ body {
       document.body.style.setProperty('--scrollY', window.scrollY);
     });
   </script>
+  <script>
+  document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // stop form from submitting
+  
+    let valid = true;
+  
+    // Clear old errors
+    document.querySelectorAll(".error-text").forEach(el => el.textContent = "");
+  
+    // Get fields
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const message = document.getElementById("message");
+  
+    // Validate Name
+    if (name.value.trim() === "") {
+      name.nextElementSibling.textContent = "Name is required";
+      valid = false;
+    }
+  
+    // Validate Email
+    if (email.value.trim() === "") {
+      email.nextElementSibling.textContent = "Email is required";
+      valid = false;
+    } else if (!email.value.match(/^\S+@\S+\.\S+$/)) {
+      email.nextElementSibling.textContent = "Enter a valid email";
+      valid = false;
+    }
+  
+    // Validate Message
+    if (message.value.trim() === "") {
+      message.nextElementSibling.textContent = "Message is required";
+      valid = false;
+    }
+  
+    // If valid → submit the form
+    if (valid) {
+      this.submit();
+    }
+  });
+  </script>
+<!-- REMOVE OLD THREE.JS SCRIPTS -->
+<!-- They were here before. Now they are removed. -->
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+
+const shipcanvas = document.getElementById("spaceshipCanvas");
+const renderer = new THREE.WebGLRenderer({ canvas: shipCanvas, alpha: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+camera.position.z = 500;
+
+const light = new THREE.DirectionalLight(0xffffff, 3);
+light.position.set(100, 200, 300);
+scene.add(light);
+
+// MODEL PATHS
+const shipModels = [
+  "models/raven.glb",
+  "models/harbinger.glb"
+];
+
+const loader = new GLTFLoader();
+
+function spawnShip(direction = "leftToRight") {
+  const modelPath = shipModels[Math.floor(Math.random() * shipModels.length)];
+
+  loader.load(modelPath, (gltf) => {
+    const ship = gltf.scene;
+    ship.scale.set(20, 20, 20);
+
+    const randomY = Math.random() * 400 - 200;
+
+    let startX, endX;
+
+    if (direction === "leftToRight") {
+      startX = -800;
+      endX = 800;
+    } else {
+      startX = 800;
+      endX = -800;
+      ship.rotation.y = Math.PI;
+    }
+
+    ship.position.set(startX, randomY, -300);
+    scene.add(ship);
+
+    const speed = 1 + Math.random() * 1.5;
+
+    function animateShip() {
+      ship.position.x += direction === "leftToRight" ? speed : -speed;
+      ship.position.y += Math.sin(Date.now() * 0.005) * 0.3;
+
+      if ((direction === "leftToRight" && ship.position.x >= endX) ||
+          (direction === "rightToLeft" && ship.position.x <= endX)) {
+
+        scene.remove(ship);
+        return;
+      }
+
+      requestAnimationFrame(animateShip);
+    }
+
+    animateShip();
+  });
+}
+
+setInterval(() => {
+  spawnShip("leftToRight");
+  spawnShip("rightToLeft");
+}, 2000);
+
+function renderLoop() {
+  renderer.render(scene, camera);
+  requestAnimationFrame(renderLoop);
+}
+renderLoop();
+
+window.addEventListener("resize", () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+</script>
+
 
 </body>
 </html>
