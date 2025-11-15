@@ -688,6 +688,16 @@ function spawnShip(direction = "leftToRight") {
       endX = -800;
       ship.rotation.y = Math.PI;
     }
+    loader.load(modelPath,
+  (gltf) => {
+    console.log("Loaded model:", modelPath);
+    // rest of code
+  },
+  undefined,
+  (error) => {
+    console.error("Error loading model:", modelPath, error);
+  }
+);
 
     ship.position.set(startX, randomY, -300);
     scene.add(ship);
