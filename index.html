@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Anant Panjari Portfolio</title>
+
+  <!-- external libs -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <style>
+    /* ======= YOUR PROVIDED CSS (verbatim + small overlay/intro additions) ======= */
     html { scroll-behavior: smooth; }
     body { background: #000; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0; position: relative; }
 
@@ -262,24 +266,117 @@ body {
     pointer-events:none; 
 }
 
+/* ===== Intro overlay & portal animation (added) ===== */
+#introOverlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.intro-center {
+  text-align: center;
+  color: #fff;
+  user-select: none;
+}
+
+.intro-title {
+  font-size: 6rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.intro-sub {
+  font-weight: 600;
+  margin-top: 12px;
+  font-size: 6rem;
+  opacity: 0;
+}
+
+.intro-fadeout {
+  animation: fadeOut 0.6s ease forwards 0.4s;
+}
+
+/* LINE BASE */
+#introLine {
+  position: absolute;
+  top: 50%;             /* adjust if needed */
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: rgb(222, 13, 13);
+  opacity: 0;
+}
+
+/* LINE DRAW ANIMATION */
+#introLine.draw {
+  opacity: 1;
+  animation: drawLine 0.8s ease-out forwards;
+}
+
+@keyframes drawLine {
+  from { width: 0; }
+  to { width: 100vw; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; transform: scale(1.03); }
+}
+#glassShatter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  opacity: 0;
+}
+#glassShatter div {
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(2px);
+  transition: transform 1s ease, opacity 1s ease;
+}
+#glassShatter.active {
+  opacity: 1;
+}
+#glassShatter.active div {
+  opacity: 0;
+  transform: translate(0, 0) rotate(0deg);
+}
   </style>
 </head>
-<body>
 
+<body>
+  <!-- Intro overlay -->
+  <div id="introOverlay" aria-hidden="true">
+    <div id="glassShatter"></div>
+    <div class="intro-center" id="introCenter">
+      <span id="introLine"></span> 
+      <span id="bankaiText" class="intro-title">Bankai</span>
+      <span id="infinityText" class="intro-sub">Infinity Space</span>
+    </div>
+  </div>
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
   <!-- Spaceships 3D Canvas -->
-<canvas id="spaceshipCanvas"></canvas>
+  <canvas id="spaceshipCanvas"></canvas>
 
-  <!-- Content -->
-  <div class="content-wrapper">
+  <!-- Content (your site) -->
+  <div class="content-wrapper" id="mainContent" style="visibility:hidden; pointer-events:none;" >
     <!-- Hero Section -->
     <section id="home" class="hero">
       <div class="hero-text">
         <h3><span class="animated-name">Hi! Anant Panjari Here!</span></h3>
         <p>Hi! I am a passionate Level Designer and UI/UX Designer.  
           I create engaging and immersive game levels with a strong focus on user experience.</p>
-          </p>
       </div>
       <img src="photos/anant.png" alt="Anant Panjari" class="profile-photo">
     </section>
@@ -310,14 +407,12 @@ body {
       </div>
       
       <li class="certificate-item">
-  <span class="cert-title">You can download the game here 👉</span>
+        <span class="cert-title">You can download the game here 👉</span>
+        <a href="https://anant-panjari.itch.io/survive" target="_blank" class="btn-view">View</a>
+        <div class="underline"></div>
+      </li>
+      <br><br>
 
-  <a href="https://anant-panjari.itch.io/survive" target="_blank" class="btn-view">View</a>
-
-  <div class="underline"></div>
-</li>
-<br>
-<br>
       <h3>The Mysterious Temple :</h3><br>
       <h6>It's a first person puzzle, Exploration, horror and Survival game where there is a Detective 
         who enters the temple area to uncover the truth behind the temple but unfortunatly he got trapped 
@@ -330,21 +425,16 @@ body {
       </div>
       <br>
       <li class="certificate-item">
-  <span class="cert-title">click here to get the prototype video of the game 👉</span>
-
-  <a href="https://youtu.be/sIOwnxSKKZc" target="_blank" class="btn-view">View</a>
-
-  <div class="underline"></div>
-</li>
-<br>
-<br>
+        <span class="cert-title">click here to get the prototype video of the game 👉</span>
+        <a href="https://youtu.be/sIOwnxSKKZc" target="_blank" class="btn-view">View</a>
+        <div class="underline"></div>
+      </li>
+      <br><br>
     </section>
-    
-    <!-- Achievements Section - Fixed to match Skills section style -->
+
+    <!-- Achievements -->
     <section id="achievements" class="achievement-container reveal parallax-section">
       <h3 class="section-title">Achievements</h3>
-      
-      <!-- Content area with text and image -->
       <div class="achievement-content">
         <div class="achievement-text">
           <ul>
@@ -354,13 +444,11 @@ body {
             <li>Out of which I Ranked 464 out of 956 submissions.</li>
           </ul>
         </div>
-      
-        <!-- Right side image placeholder -->
         <img src="photos/achievement.png" class="achievement-img">
       </div>
     </section>
 
-    <!-- Skills Section -->
+    <!-- Skills -->
     <section id="skills" class="section-card reveal">
       <h3 class="section-title">Technical Skills</h3>
       <div class="d-flex justify-content-center gap-5 mb-5">
@@ -396,34 +484,28 @@ body {
         <span>• Time Management</span>
       </div>
     </section>
-        <!-- Certificates Section -->
+
+    <!-- Certificates -->
     <section id="certificates" class="certificate-container reveal parallax-section">
       <h3 class="section-title">Certificates</h3>
       <ul class="certificate-list">
         <li>
           <span>Joy of Learning python</span>
-          <a href="https://media.licdn.com/dms/image/v2/D5622AQEAgE7h5qPc2A/feedshare-shrink_1280/feedshare-shrink_1280/0/1726932392784?e=1764806400&v=beta&t=8QC8O8gcFgY7YIafYKfmgRTA_MLmMXzwsLJAqW7ZAZc" target="_blank" class="btn-view">View</a>
+          <a href="#" class="btn-view">View</a>
         </li>
         <li>
-          <span>Build 5 playable 3D games in Unity 6 using C#. Learn real coding skills and master core game dev techniques.</span>
-          <a href="https://example.com/unity" target="_blank" class="btn-view">View</a>
+          <span>Build 5 playable 3D games in Unity 6 using C#.</span>
+          <a href="#" class="btn-view">View</a>
         </li>
         <li>
           <span>A Step-by-Step Guide for Beginners to Design Web & Mobile Projects in Figma</span>
-          <a href="https://udemy-certificate.s3.amazonaws.com/image/UC-faf05c69-5a97-4bdc-a47a-1e71763ec5bd.jpg" target="_blank" class="btn-view">View</a>
-        </li>
-        <li>
-          <span>Python with Data Science</span>
-          <a href="https://media.licdn.com/dms/image/v2/D5622AQFXj8fESB7-_g/feedshare-shrink_2048_1536/B56ZmljAmdJoAw-/0/1759419045185?e=1764806400&v=beta&t=y7imA3HNTV6fHttCMFTVKSUqxWx6nN5jrbo8S2Nntvo" target="_blank" class="btn-view">View</a>
+          <a href="#" class="btn-view">View</a>
         </li>
       </ul>
     </section>
 
-
-
-    <!-- Contact Section -->
+    <!-- Contact -->
     <section id="contact" class="reveal parallax-section">
-
       <div class="container my-5" style="max-width: 700px;">
         <div class="p-5 rounded" style="background-color:#1a1a1a; color:#f5f5f5;">
           <h2 class="mb-4">Contact Me</h2>
@@ -448,347 +530,347 @@ body {
         </div>
       </div>
     </section>
-    <!-- ===== Footer ===== -->
-<footer class="footer">
-  <div class="container text-center text-md-start">
-    <div class="row">
-      <!-- Contact Info -->
-      <div class="col-md-12">
-        <p>
-          <i class="fa fa-phone"></i> Contact number: +91 962-480-1234</p>
-          <p>
-          <i class="fa fa-envelope"></i> Email: anant@gmail.com
-        </p>
-        <p>
-          <i class="fa fa-map-marker"></i> Address: Ashopalav Society GIDC Main Road, Porbandde, 360225
-        </p>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container text-center text-md-start">
+        <div class="row">
+          <div class="col-md-12">
+            <p><i class="fa fa-phone"></i> Contact number: +91 962-480-1234</p>
+            <p><i class="fa fa-envelope"></i> Email: anant@gmail.com</p>
+            <p><i class="fa fa-map-marker"></i> Address: Ashopalav Society GIDC Main Road, Porbandde, 360225</p>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <span class="made-by">Made By <span class="name">Anant Panjari</span></span>
+        </div>
       </div>
-    </div>
-
-    <!-- Made By -->
-    <div class="text-center mt-3">
-      <span class="made-by">Made By <span class="name">Anant Panjari</span></span>
-    </div>
-  </div>
-</footer>
-
-
+    </footer>
   </div>
 
+  <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Starfield + Meteoroids -->
+  <!-- Starfield (keeps your original feel) -->
   <script>
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
+    (function(){
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [], meteoroids = [];
+      const numStars = 150, numMeteoroids = 5;
+      let baseSpeed = 2;
 
-    let stars = [], meteoroids = [];
-    const numStars = 150, numMeteoroids = 5;
-    let baseSpeed = 2; // Base speed for consistent animation
+      function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
 
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for (let i=0; i<numStars; i++) {
-      stars.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        radius: Math.random()*1.5+0.5,
-        speed: Math.random()*0.5+0.1,
-        opacity: Math.random()
-      });
-    }
-
-    // Initialize meteoroids with consistent speed
-    function initMeteoroids() {
-      meteoroids = [];
-      for (let i=0; i<numMeteoroids; i++) {
-        // Create meteoroids from various positions including middle
-        const startX = Math.random() * canvas.width;
-        meteoroids.push({
-          x: startX,
-          y: -Math.random()*50, // Start above the screen
-          length: Math.random()*20+10,
-          speed: baseSpeed + Math.random(), // Use base speed with slight variation
-          opacity: Math.random()*0.5+0.5,
-          // Add angle for more natural falling direction
-          angle: Math.random() * 0.5 + 0.3 // Between 0.3 and 0.8 radians
+      for (let i=0; i<numStars; i++) {
+        stars.push({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height,
+          radius: Math.random()*1.5+0.5,
+          speed: Math.random()*0.5+0.1,
+          opacity: Math.random()
         });
       }
-    }
-    
-    initMeteoroids();
 
-    function animate() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-
-      // Draw stars
-      stars.forEach(s=>{
-        s.x+=s.speed;
-        if(s.x>canvas.width) s.x=0;
-        s.opacity += (Math.random()-0.5)*0.05;
-        if(s.opacity<0.3) s.opacity=0.3;
-        if(s.opacity>1) s.opacity=1;
-        ctx.beginPath();
-        ctx.arc(s.x,s.y,s.radius,0,Math.PI*2);
-        ctx.fillStyle=`rgba(255,255,255,${s.opacity})`;
-        ctx.fill();
-      });
-
-      // Draw meteoroids
-      meteoroids.forEach(m=>{
-        // Update position based on consistent speed and angle
-        m.x += m.speed * Math.cos(m.angle);
-        m.y += m.speed * Math.sin(m.angle);
-        
-        // Reset if out of bounds
-        if(m.x>canvas.width || m.y>canvas.height || m.x < -20) {
-          // Start from various positions including middle of the top
-          m.x = Math.random() * canvas.width;
-          m.y = -Math.random()*50;
-          m.length = Math.random()*20+10;
-          m.speed = baseSpeed + Math.random(); // Consistent speed
-          m.opacity = Math.random()*0.5+0.5;
-          m.angle = Math.random() * 0.5 + 0.3; // Random angle between 0.3 and 0.8 radians
+      function initMeteoroids() {
+        meteoroids = [];
+        for (let i=0; i<numMeteoroids; i++) {
+          const startX = Math.random() * canvas.width;
+          meteoroids.push({
+            x: startX,
+            y: -Math.random()*50,
+            length: Math.random()*20+10,
+            speed: baseSpeed + Math.random(),
+            opacity: Math.random()*0.5+0.5,
+            angle: Math.random() * 0.5 + 0.3
+          });
         }
-        
-        // Draw the meteoroid
-        ctx.beginPath();
-        ctx.moveTo(m.x, m.y);
-        ctx.lineTo(m.x - m.length * Math.cos(m.angle), m.y - m.length * Math.sin(m.angle));
-        ctx.strokeStyle=`rgba(255,255,255,${m.opacity})`;
-        ctx.lineWidth=2;
-        ctx.stroke();
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    // Reinitialize meteoroids when window is resized
-    window.addEventListener('resize', function() {
-      resizeCanvas();
+      }
       initMeteoroids();
-    });
 
-    animate();
+      function animate() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        stars.forEach(s=>{
+          s.x+=s.speed;
+          if(s.x>canvas.width) s.x=0;
+          s.opacity += (Math.random()-0.5)*0.05;
+          s.opacity = Math.max(0.3, Math.min(1, s.opacity));
+          ctx.beginPath();
+          ctx.arc(s.x,s.y,s.radius,0,Math.PI*2);
+          ctx.fillStyle=`rgba(255,255,255,${s.opacity})`;
+          ctx.fill();
+        });
+
+        meteoroids.forEach(m=>{
+          m.x += m.speed * Math.cos(m.angle);
+          m.y += m.speed * Math.sin(m.angle);
+          if(m.x>canvas.width || m.y>canvas.height || m.x < -20) {
+            m.x = Math.random() * canvas.width;
+            m.y = -Math.random()*50;
+            m.length = Math.random()*20+10;
+            m.speed = baseSpeed + Math.random();
+            m.opacity = Math.random()*0.5+0.5;
+            m.angle = Math.random() * 0.5 + 0.3;
+          }
+          ctx.beginPath();
+          ctx.moveTo(m.x, m.y);
+          ctx.lineTo(m.x - m.length * Math.cos(m.angle), m.y - m.length * Math.sin(m.angle));
+          ctx.strokeStyle=`rgba(255,255,255,${m.opacity})`;
+          ctx.lineWidth=2;
+          ctx.stroke();
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', function() { resizeCanvas(); initMeteoroids(); });
+      animate();
+    })();
   </script>
+
+  <!-- Reveal/parallax small scripts -->
   <script>
     const revealElements = document.querySelectorAll('.reveal');
-  
     const revealOnScroll = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.15 });
-  
     revealElements.forEach(el => revealOnScroll.observe(el));
-  </script>
-  <script>
-    /* ===== SECTION & IMAGE PARALLAX ===== */
+
     const parallaxSections = document.querySelectorAll('.parallax-section');
-    const parallaxImages = document.querySelectorAll('.parallax-img');
-  
     const parallaxObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.2 });
-  
     parallaxSections.forEach(sec => parallaxObserver.observe(sec));
-    parallaxImages.forEach(img => parallaxObserver.observe(img));
-  
-    /* ===== BACKGROUND PARALLAX ===== */
-    window.addEventListener("scroll", () => {
-      document.body.style.setProperty('--scrollY', window.scrollY);
-    });
+
+    window.addEventListener("scroll", () => { document.body.style.setProperty('--scrollY', window.scrollY); });
   </script>
-  <script>
-  document.getElementById("contactForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // stop form from submitting
-  
-    let valid = true;
-  
-    // Clear old errors
-    document.querySelectorAll(".error-text").forEach(el => el.textContent = "");
-  
-    // Get fields
-    const name = document.getElementById("name");
-    const email = document.getElementById("email");
-    const message = document.getElementById("message");
-  
-    // Validate Name
-    if (name.value.trim() === "") {
-      name.nextElementSibling.textContent = "Name is required";
-      valid = false;
+
+  <!-- Spaceships: three.js module -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
+    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+
+    // Canvas + renderer
+    const shipCanvas = document.getElementById('spaceshipCanvas');
+    // Ensure canvas sized properly (CSS sets width/height to 100%)
+    function resizeCanvasToDisplaySize(canvas) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        return true;
+      }
+      return false;
     }
-  
-    // Validate Email
-    if (email.value.trim() === "") {
-      email.nextElementSibling.textContent = "Email is required";
-      valid = false;
-    } else if (!email.value.match(/^\S+@\S+\.\S+$/)) {
-      email.nextElementSibling.textContent = "Enter a valid email";
-      valid = false;
-    }
-  
-    // Validate Message
-    if (message.value.trim() === "") {
-      message.nextElementSibling.textContent = "Message is required";
-      valid = false;
-    }
-  
-    // If valid → submit the form
-    if (valid) {
-      this.submit();
-    }
-  });
-  </script>
-<!-- REMOVE OLD THREE.JS SCRIPTS -->
-<!-- They were here before. Now they are removed. -->
+    resizeCanvasToDisplaySize(shipCanvas);
 
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
-import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
+    const renderer = new THREE.WebGLRenderer({ canvas: shipCanvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
 
-const shipCanvas = document.getElementById("spaceshipCanvas");
-const renderer = new THREE.WebGLRenderer({ 
-    canvas: shipCanvas, 
-    alpha: true,
-    antialias: true 
-});
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
+    camera.position.z = 200;
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit for performance
+    // lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.2);
+    scene.add(ambientLight);
+    const dir = new THREE.DirectionalLight(0xffffff, 1.8);
+    dir.position.set(100, 200, 300);
+    scene.add(dir);
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
-camera.position.z = 500;
+    const loader = new GLTFLoader();
+    const shipModels = [
+      'models/raven.glb',
+      'models/harbinger.glb'
+    ];
 
-// Better lighting
-const ambientLight = new THREE.AmbientLight(0x404040, 2);
-scene.add(ambientLight);
-
-const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
-directionalLight.position.set(100, 200, 300);
-scene.add(directionalLight);
-
-// Create simple geometry as fallback since models are missing
-function createSimpleShip(color = 0x4488ff) {
-    const group = new THREE.Group();
-    
-    // Larger ship geometry
-    const geometry = new THREE.ConeGeometry(15, 35, 3); // Increased size
-    const material = new THREE.MeshPhongMaterial({ 
-        color: color,
-        shininess: 100,
-        emissive: 0x222266 // Add glow effect
-    });
-    const ship = new THREE.Mesh(geometry, material);
-    ship.rotation.x = Math.PI; // Point forward
-    
-    group.add(ship);
-    
-    // Add some wings (larger)
-    const wingGeometry = new THREE.BoxGeometry(25, 3, 8);
-    const wing1 = new THREE.Mesh(wingGeometry, material);
-    wing1.position.y = -8;
-    wing1.position.x = 12;
-    wing1.rotation.z = Math.PI / 6;
-    
-    const wing2 = new THREE.Mesh(wingGeometry, material);
-    wing2.position.y = -8;
-    wing2.position.x = -12;
-    wing2.rotation.z = -Math.PI / 6;
-    
-    group.add(wing1);
-    group.add(wing2);
-    
-    return group;
-}
-
-function spawnShip(direction = "leftToRight") {
-    // Use simple geometry since models are missing
-    const ship = createSimpleShip();
-    
-    const randomY = Math.random() * 400 - 200;
-    const randomZ = Math.random() * 200 - 400; // Vary depth
-
-    let startX, endX;
-
-    if (direction === "leftToRight") {
-        startX = -1000;
-        endX = 1000;
-    } else {
-        startX = 1000;
-        endX = -1000;
-        ship.rotation.y = Math.PI; // Rotate to face direction
+    // fallback simple ship if GLB fails
+    function createFallbackShipMesh() {
+      const g = new THREE.ConeGeometry(6, 24, 8);
+      const m = new THREE.MeshPhongMaterial({ color: 0x66aaff });
+      const mesh = new THREE.Mesh(g, m);
+      mesh.rotation.x = Math.PI / 2;
+      return mesh;
     }
 
-    ship.position.set(startX, randomY, randomZ);
-    scene.add(ship);
+    function spawnShip(direction = 'leftToRight') {
+      const modelPath = shipModels[Math.floor(Math.random() * shipModels.length)];
+      console.log('Attempt loading:', modelPath);
+      loader.load(modelPath,
+        (gltf) => {
+          console.log('Loaded', modelPath);
+          const ship = gltf.scene;
+          // normalize scale (adjust if your model is very large/small)
+          ship.scale.set(1.8, 1.8, 1.8);
+          const randomY = Math.random() * 300 - 150;
+          const randomZ = Math.random() * -200;
 
-    const speed = 2 + Math.random() * 2;
-    const bobSpeed = Math.random() * 0.002 + 0.001;
-    const bobHeight = Math.random() * 0.5 + 0.2;
+          let startX, endX;
+          if (direction === 'leftToRight') { startX = -1400; endX = 1400; }
+          else { startX = 1400; endX = -1400; ship.rotation.y = Math.PI; }
 
-    function animateShip() {
-        ship.position.x += direction === "leftToRight" ? speed : -speed;
-        
-        // Gentle bobbing motion
-        ship.position.y += Math.sin(Date.now() * bobSpeed) * bobHeight;
-        
-        // Gentle rocking
-        ship.rotation.z = Math.sin(Date.now() * bobSpeed * 0.5) * 0.1;
+          ship.position.set(startX, randomY, randomZ);
+          scene.add(ship);
 
-        if ((direction === "leftToRight" && ship.position.x >= endX) ||
-            (direction === "rightToLeft" && ship.position.x <= endX)) {
-            scene.remove(ship);
-            return;
+          const speed = 2 + Math.random() * 2;
+          const bobSpeed = Math.random() * 0.003 + 0.002;
+
+          function animateShip(){
+            if (!ship.parent) return;
+            ship.position.x += direction === 'leftToRight' ? speed : -speed;
+            ship.position.y += Math.sin(Date.now() * bobSpeed) * 0.4;
+            if ((direction === 'leftToRight' && ship.position.x >= endX) ||
+                (direction !== 'leftToRight' && ship.position.x <= endX)) {
+              scene.remove(ship);
+              return;
+            }
+            requestAnimationFrame(animateShip);
+          }
+          animateShip();
+        },
+        (progress) => {
+          if (progress && progress.loaded && progress.total) {
+            const pct = (progress.loaded / progress.total * 100).toFixed(1);
+            console.log(`Loading ${modelPath}: ${pct}%`);
+          }
+        },
+        (err) => {
+          console.error('Failed to load', modelPath, err);
+          // fallback
+          const fallback = createFallbackShipMesh();
+          const randomY = Math.random() * 300 - 150;
+          const randomZ = Math.random() * -200;
+          let startX, endX;
+          if (direction === 'leftToRight') { startX = -1400; endX = 1400; }
+          else { startX = 1400; endX = -1400; fallback.rotation.y = Math.PI; }
+          fallback.position.set(startX, randomY, randomZ);
+          scene.add(fallback);
+          const speed = 2 + Math.random()*2;
+          function animateFallback(){
+            if (!fallback.parent) return;
+            fallback.position.x += direction === 'leftToRight' ? speed : -speed;
+            fallback.rotation.z = Math.sin(Date.now() * 0.003) * 0.1;
+            if ((direction === 'leftToRight' && fallback.position.x >= endX) ||
+                (direction !== 'leftToRight' && fallback.position.x <= endX)) {
+              scene.remove(fallback);
+              return;
+            }
+            requestAnimationFrame(animateFallback);
+          }
+          animateFallback();
         }
-
-        requestAnimationFrame(animateShip);
+      );
     }
 
-    animateShip();
-}
+    // spawn pattern: every 3s spawn left->right and right->left with small offset
+    setInterval(() => {
+      spawnShip('leftToRight');
+      setTimeout(() => spawnShip('rightToLeft'), 900);
+    }, 3000);
 
-// Spawn ships at intervals
-setInterval(() => {
-    if (Math.random() > 0.5) {
-        spawnShip("leftToRight");
-    } else {
-        spawnShip("rightToLeft");
+    // initial
+    spawnShip('leftToRight');
+    setTimeout(()=> spawnShip('rightToLeft'), 1000);
+
+    function renderLoop(){
+      renderer.render(scene, camera);
+      requestAnimationFrame(renderLoop);
     }
-}, 3000); // Spawn every 3 seconds
+    renderLoop();
 
-// Initial spawn
-for (let i = 0; i < 3; i++) {
+    // resize handler
+    window.addEventListener('resize', () => {
+      resizeCanvasToDisplaySize(shipCanvas);
+      renderer.setSize(window.innerWidth, window.innerHeight, false);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+
+    // Expose for debugging
+    window.__three_scene = scene;
+  </script>
+
+  <!-- Intro + speech + portal control -->
+  <script>
+    (function(){
+  const overlay = document.getElementById('introOverlay');
+  const bankaiText = document.getElementById('bankaiText');
+  const infinityText = document.getElementById('infinityText');
+  const introLine = document.getElementById("introLine");
+  const main = document.getElementById('mainContent');
+
+  function runIntro() {
+
+    // BANKAI APPEAR
+    bankaiText.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+    bankaiText.style.opacity = '1';
+    bankaiText.style.transform = 'scale(1.02)';
+
+    // INFINITY SPACE APPEAR
     setTimeout(() => {
-        spawnShip(i % 2 === 0 ? "leftToRight" : "rightToLeft");
-    }, i * 1000);
+      infinityText.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+      infinityText.style.opacity = '1';
+      infinityText.style.transform = 'translateY(0)';
+    }, 600);
+
+    // LINE APPEARS AFTER INFINITY SPACE
+    setTimeout(() => {
+      introLine.classList.add("draw");
+    }, 900);
+
+    // GLASS SHATTER
+    setTimeout(() => {
+      document.getElementById("glassShatter").classList.add("active");
+    }, 1800);
+
+    // INTRO FADE OUT
+    setTimeout(() => {
+      overlay.style.opacity = 0;
+    }, 2400);
+
+    // SHOW MAIN CONTENT
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      main.style.visibility = 'visible';
+      main.style.pointerEvents = 'auto';
+    }, 2600);
+  }
+
+  runIntro();
+})();
+  </script>
+    <script>
+        function createShatterPieces() {
+      const container = document.getElementById("glassShatter");
+      for (let i = 0; i < 100; i++) {
+        const piece = document.createElement("div");
+        container.appendChild(piece);
+      }
+    }
+    createShatterPieces();
+    </script>
+    <script>
+    function scatterGlass() {
+  const pieces = document.querySelectorAll("#glassShatter div");
+
+  pieces.forEach((p) => {
+    const x = (Math.random() - 0.5) * 600;
+    const y = (Math.random() - 0.5) * 600;
+    const r = (Math.random() - 0.5) * 180;
+
+    p.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+  });
 }
 
-function renderLoop() {
-    renderer.render(scene, camera);
-    requestAnimationFrame(renderLoop);
-}
-renderLoop();
+setTimeout(() => {
+  document.getElementById("glassShatter").classList.add("active");
+  scatterGlass();
+}, 1500);
 
-window.addEventListener("resize", () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-});
-
-// Debug info
-console.log("Spaceship system initialized - using procedural ships");
-</script>
-
-
+  </script>
 </body>
 </html>
