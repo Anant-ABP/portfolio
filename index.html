@@ -815,23 +815,7 @@ body {
   const introLine = document.getElementById("introLine");
   const main = document.getElementById('mainContent');
 
-  // Check if intro was already played
-  const introPlayed = localStorage.getItem("introPlayed");
-
-  if (!introPlayed) {
-      // First visit → run intro
-      runIntro();
-      localStorage.setItem("introPlayed", "true");
-  } 
-  else {
-      // Skip intro → hide overlay instantly
-      overlay.style.display = "none";
-      main.style.opacity = "1";
-      main.style.pointerEvents = "auto";
-  }
-
   function runIntro() {
-
     bankaiText.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
     bankaiText.style.opacity = '1';
     bankaiText.style.transform = 'scale(1.02)';
@@ -851,14 +835,16 @@ body {
     }, 2400);
 
     setTimeout(() => {
-      main.style.opacity = "1";
+      main.style.opacity = "1";        
       main.style.pointerEvents = "auto";
     }, 1800);
-
+    
     setTimeout(() => {
       overlay.style.display = "none";
     }, 2600);
   }
+
+  runIntro();
 })();
 
   </script>
