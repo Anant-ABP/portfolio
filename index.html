@@ -132,6 +132,7 @@
       margin: 45px auto;
       max-width: 900px;
       box-shadow: 0 0 20px rgba(128,0,255,0.6);
+      
     }
     
     .achievement-content {
@@ -287,15 +288,6 @@ body {
 
 #starfield {
   transform: translateY(calc(var(--scrollY) * 0.15));
-}
-#spaceshipCanvas { 
-    position: fixed; 
-    top:0; 
-    left:0; 
-    width:100%; 
-    height:100%; 
-    z-index: 1;
-    pointer-events:none; 
 }
 
 /* ===== Intro overlay & portal animation (added) ===== */
@@ -492,8 +484,6 @@ body {
   </div>
   <!-- Starfield -->
   <canvas id="starfield"></canvas>
-  <!-- Spaceships 3D Canvas -->
-  <canvas id="spaceshipCanvas"></canvas>
 
   <!-- Content (your site) -->
   <div class="content-wrapper" id="mainContent" style="opacity:0; pointer-events:none; transition: opacity .8s ease;">
@@ -815,152 +805,6 @@ body {
     window.addEventListener("scroll", () => { document.body.style.setProperty('--scrollY', window.scrollY); });
   </script>
 
-  <!-- Spaceships: three.js module -->
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
-    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/loaders/GLTFLoader.js';
-
-    // Canvas + renderer
-    const shipCanvas = document.getElementById('spaceshipCanvas');
-    // Ensure canvas sized properly (CSS sets width/height to 100%)
-    function resizeCanvasToDisplaySize(canvas) {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-        return true;
-      }
-      return false;
-    }
-    resizeCanvasToDisplaySize(shipCanvas);
-
-    const renderer = new THREE.WebGLRenderer({ canvas: shipCanvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight, false);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
-    camera.position.z = 200;
-
-    // lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.2);
-    scene.add(ambientLight);
-    const dir = new THREE.DirectionalLight(0xffffff, 1.8);
-    dir.position.set(100, 200, 300);
-    scene.add(dir);
-
-    const loader = new GLTFLoader();
-    const shipModels = [
-      'models/raven.glb',
-      'models/harbinger.glb'
-    ];
-
-    // fallback simple ship if GLB fails
-    function createFallbackShipMesh() {
-      const g = new THREE.ConeGeometry(6, 24, 8);
-      const m = new THREE.MeshPhongMaterial({ color: 0x66aaff });
-      const mesh = new THREE.Mesh(g, m);
-      mesh.rotation.x = Math.PI / 2;
-      return mesh;
-    }
-
-    function spawnShip(direction = 'leftToRight') {
-      const modelPath = shipModels[Math.floor(Math.random() * shipModels.length)];
-      console.log('Attempt loading:', modelPath);
-      loader.load(modelPath,
-        (gltf) => {
-          console.log('Loaded', modelPath);
-          const ship = gltf.scene;
-          // normalize scale (adjust if your model is very large/small)
-          ship.scale.set(1.8, 1.8, 1.8);
-          const randomY = Math.random() * 300 - 150;
-          const randomZ = Math.random() * -200;
-
-          let startX, endX;
-          if (direction === 'leftToRight') { startX = -1400; endX = 1400; }
-          else { startX = 1400; endX = -1400; ship.rotation.y = Math.PI; }
-
-          ship.position.set(startX, randomY, randomZ);
-          scene.add(ship);
-
-          const speed = 2 + Math.random() * 2;
-          const bobSpeed = Math.random() * 0.003 + 0.002;
-
-          function animateShip(){
-            if (!ship.parent) return;
-            ship.position.x += direction === 'leftToRight' ? speed : -speed;
-            ship.position.y += Math.sin(Date.now() * bobSpeed) * 0.4;
-            if ((direction === 'leftToRight' && ship.position.x >= endX) ||
-                (direction !== 'leftToRight' && ship.position.x <= endX)) {
-              scene.remove(ship);
-              return;
-            }
-            requestAnimationFrame(animateShip);
-          }
-          animateShip();
-        },
-        (progress) => {
-          if (progress && progress.loaded && progress.total) {
-            const pct = (progress.loaded / progress.total * 100).toFixed(1);
-            console.log(`Loading ${modelPath}: ${pct}%`);
-          }
-        },
-        (err) => {
-          console.error('Failed to load', modelPath, err);
-          // fallback
-          const fallback = createFallbackShipMesh();
-          const randomY = Math.random() * 300 - 150;
-          const randomZ = Math.random() * -200;
-          let startX, endX;
-          if (direction === 'leftToRight') { startX = -1400; endX = 1400; }
-          else { startX = 1400; endX = -1400; fallback.rotation.y = Math.PI; }
-          fallback.position.set(startX, randomY, randomZ);
-          scene.add(fallback);
-          const speed = 2 + Math.random()*2;
-          function animateFallback(){
-            if (!fallback.parent) return;
-            fallback.position.x += direction === 'leftToRight' ? speed : -speed;
-            fallback.rotation.z = Math.sin(Date.now() * 0.003) * 0.1;
-            if ((direction === 'leftToRight' && fallback.position.x >= endX) ||
-                (direction !== 'leftToRight' && fallback.position.x <= endX)) {
-              scene.remove(fallback);
-              return;
-            }
-            requestAnimationFrame(animateFallback);
-          }
-          animateFallback();
-        }
-      );
-    }
-
-    // spawn pattern: every 3s spawn left->right and right->left with small offset
-    setInterval(() => {
-      spawnShip('leftToRight');
-      setTimeout(() => spawnShip('rightToLeft'), 900);
-    }, 3000);
-
-    // initial
-    spawnShip('leftToRight');
-    setTimeout(()=> spawnShip('rightToLeft'), 1000);
-
-    function renderLoop(){
-      renderer.render(scene, camera);
-      requestAnimationFrame(renderLoop);
-    }
-    renderLoop();
-
-    // resize handler
-    window.addEventListener('resize', () => {
-      resizeCanvasToDisplaySize(shipCanvas);
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    });
-
-    // Expose for debugging
-    window.__three_scene = scene;
-  </script>
 
   <!-- Intro + speech + portal control -->
   <script>
