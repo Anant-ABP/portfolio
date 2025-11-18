@@ -195,6 +195,38 @@
   font-size: 15px;
 }
 
+/* === Contact Form Glass Effect === */
+.contact-glass {
+  background: rgba(255, 255, 255, 0.07);        /* transparent white */
+  backdrop-filter: blur(5px) saturate(180%);   /* frosted glass */
+  -webkit-backdrop-filter: blur(5px) saturate(180%);
+  
+  border: 1px solid rgba(255, 255, 255, 0.25);  /* subtle border */
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.25); /* purple glow */
+  
+  border-radius: 20px;
+  color: #ffffff;
+  transition: 0.3s ease;
+}
+
+/* Optional hover effect */
+.contact-glass:hover {
+  box-shadow: 0 0 40px rgba(255, 0, 255, 0.4);
+  transform: scale(1.01);
+}
+.contact-glass input,
+.contact-glass textarea {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+.contact-glass input::placeholder,
+.contact-glass textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .footer i {
   margin-right: 8px;
   color: #fff;
@@ -351,6 +383,100 @@ body {
   opacity: 0;
   transform: translate(0, 0) rotate(0deg);
 }
+
+/* ===========================
+   MOBILE RESPONSIVE FIXES
+   =========================== */
+
+/* For all screens under 768px (mobile + small tablets) */
+@media (max-width: 768px) {
+
+  /* ====== GLOBAL ====== */
+  .section-card,
+  .achievement-container,
+  .certificate-container,
+  .hero {
+    max-width: 95%;
+    margin: 20px auto;
+    padding: 20px 15px;
+  }
+
+  /* ====== HERO SECTION ====== */
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-text p {
+    max-width: 100%;
+  }
+
+  .profile-photo {
+    margin-top: 15px;
+    width: 120px;
+    height: 120px;
+    transform: none !important;
+  }
+
+  /* ====== SOCIAL ICONS ====== */
+  .social-container {
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 12px 10px;
+  }
+
+  /* ====== PROJECT SECTION ====== */
+  .project-images img:hover {
+    transform: scale(1.1);  /* smaller zoom on mobile */
+  }
+
+  .project-images .col-md-4 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  /* ====== ACHIEVEMENT SECTION ====== */
+  .achievement-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .achievement-img {
+    width: 90%;
+    height: auto;
+    margin-top: 12px;
+    transform: none !important;
+  }
+
+  /* ====== SKILLS ====== */
+  .d-flex.gap-5 {
+    flex-wrap: wrap;
+    gap: 20px !important;
+  }
+
+  /* ====== CERTIFICATES ====== */
+  .certificate-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .btn-view {
+    align-self: flex-start;
+  }
+
+  /* ====== CONTACT FORM ====== */
+  #contactForm .form-control.w-50 {
+    width: 100% !important;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    text-align: center;
+    font-size: 14px;
+  }
+}
+
   </style>
 </head>
 
@@ -370,7 +496,7 @@ body {
   <canvas id="spaceshipCanvas"></canvas>
 
   <!-- Content (your site) -->
-  <div class="content-wrapper" id="mainContent" style="visibility:hidden; pointer-events:none;" >
+  <div class="content-wrapper" id="mainContent" style="opacity:0; pointer-events:none; transition: opacity .8s ease;">
     <!-- Hero Section -->
     <section id="home" class="hero">
       <div class="hero-text">
@@ -491,7 +617,7 @@ body {
       <ul class="certificate-list">
         <li>
           <span>Joy of Learning python</span>
-          <a href="#" class="btn-view">View</a>
+          <a href="https://media.licdn.com/dms/image/v2/D5622AQEAgE7h5qPc2A/feedshare-shrink_800/feedshare-shrink_800/0/1726932392784?e=1764806400&v=beta&t=7ZoOzP_oKhXPzkAS9rUq7Hahe9NSbqHRwRhfM3nU2_o" class="btn-view">View</a>
         </li>
         <li>
           <span>Build 5 playable 3D games in Unity 6 using C#.</span>
@@ -499,7 +625,11 @@ body {
         </li>
         <li>
           <span>A Step-by-Step Guide for Beginners to Design Web & Mobile Projects in Figma</span>
-          <a href="#" class="btn-view">View</a>
+          <a href="https://media.licdn.com/dms/image/v2/D5622AQE43Dz3CbEVkA/feedshare-shrink_2048_1536/B56Zl2pX93I4A4-/0/1758632182364?e=1764806400&v=beta&t=CxGAJ6HvGehtPWXihiCsBTj3iwQy5C3xDMKbY8A3lrY" class="btn-view">View</a>
+        </li>
+        <li>
+          <span>Python for Data Science</span>
+          <a href="https://media.licdn.com/dms/image/v2/D5622AQFXj8fESB7-_g/feedshare-shrink_800/B56ZmljAmdJoAg-/0/1759419045167?e=1764806400&v=beta&t=IJjAxc0-82hTr7cBI4J7GQ7DrgBdeynDVNOl-a7X83g" class="btn-view">View</a>
         </li>
       </ul>
     </section>
@@ -507,22 +637,22 @@ body {
     <!-- Contact -->
     <section id="contact" class="reveal parallax-section">
       <div class="container my-5" style="max-width: 700px;">
-        <div class="p-5 rounded" style="background-color:#1a1a1a; color:#f5f5f5;">
+        <div class="contact-glass p-5 rounded">
           <h2 class="mb-4">Contact Me</h2>
-          <form id="contactForm" action="https://formspree.io/f/xovngbja" method="POST">
+          <form id="contactForm" action="https://formspree.io/f/xovngbja" method="POST" novalidate>
             <div class="mb-3">
               <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control w-50 custom-input" name="name" id="name" placeholder="Enter your name">
+              <input type="text" class="form-control w-50 custom-input" name="name" id="name" placeholder="Enter your name" required>
               <small class="error-text text-danger"></small>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control w-50 custom-input" name="email" id="email" placeholder="Enter your email">
+              <input type="email" class="form-control w-50 custom-input" name="email" id="email" placeholder="Enter your email" required>
               <small class="error-text text-danger"></small>
             </div>
             <div class="mb-3">
               <label for="message" class="form-label">Message</label>
-              <textarea class="form-control w-50 custom-textarea" name="message" id="message" rows="4" placeholder="Your message" ></textarea>
+              <textarea class="form-control w-50 custom-textarea" name="message" id="message" rows="4" placeholder="Your message" required></textarea>
               <small class="error-text text-danger"></small>
             </div>
             <button type="submit" class="btn btn-submit">Submit</button>
@@ -551,6 +681,44 @@ body {
   <!-- libs -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+  document.getElementById("contactForm").addEventListener("submit", function(e) {
+    
+    let valid = true;
+  
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const message = document.getElementById("message");
+  
+    // CLEAR OLD ERRORS
+    document.querySelectorAll(".error-text").forEach(t => t.textContent = "");
+  
+    // NAME
+    if (name.value.trim() === "") {
+      name.nextElementSibling.textContent = "Please enter your name.";
+      valid = false;
+    }
+  
+    // EMAIL
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email.value.trim())) {
+      email.nextElementSibling.textContent = "Please enter a valid email.";
+      valid = false;
+    }
+  
+    // MESSAGE
+    if (message.value.trim() === "") {
+      message.nextElementSibling.textContent = "Please enter a message.";
+      valid = false;
+    }
+  
+    // STOP FORM SUBMISSION IF INVALID
+    if (!valid) {
+      e.preventDefault();
+    }
+  });
+
+  </script>
   <!-- Starfield (keeps your original feel) -->
   <script>
     (function(){
@@ -796,52 +964,59 @@ body {
 
   <!-- Intro + speech + portal control -->
   <script>
-    (function(){
+(function(){
   const overlay = document.getElementById('introOverlay');
   const bankaiText = document.getElementById('bankaiText');
   const infinityText = document.getElementById('infinityText');
   const introLine = document.getElementById("introLine");
   const main = document.getElementById('mainContent');
 
+  // Check if intro was already played
+  const introPlayed = localStorage.getItem("introPlayed");
+
+  if (!introPlayed) {
+      // First visit → run intro
+      runIntro();
+      localStorage.setItem("introPlayed", "true");
+  } 
+  else {
+      // Skip intro → hide overlay instantly
+      overlay.style.display = "none";
+      main.style.opacity = "1";
+      main.style.pointerEvents = "auto";
+  }
+
   function runIntro() {
 
-    // BANKAI APPEAR
     bankaiText.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
     bankaiText.style.opacity = '1';
     bankaiText.style.transform = 'scale(1.02)';
 
-    // INFINITY SPACE APPEAR
     setTimeout(() => {
       infinityText.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
       infinityText.style.opacity = '1';
       infinityText.style.transform = 'translateY(0)';
     }, 600);
 
-    // LINE APPEARS AFTER INFINITY SPACE
     setTimeout(() => {
       introLine.classList.add("draw");
     }, 900);
 
-    // GLASS SHATTER
-    setTimeout(() => {
-      document.getElementById("glassShatter").classList.add("active");
-    }, 1800);
-
-    // INTRO FADE OUT
     setTimeout(() => {
       overlay.style.opacity = 0;
     }, 2400);
 
-    // SHOW MAIN CONTENT
     setTimeout(() => {
-      overlay.style.display = 'none';
-      main.style.visibility = 'visible';
-      main.style.pointerEvents = 'auto';
+      main.style.opacity = "1";
+      main.style.pointerEvents = "auto";
+    }, 1800);
+
+    setTimeout(() => {
+      overlay.style.display = "none";
     }, 2600);
   }
-
-  runIntro();
 })();
+
   </script>
     <script>
         function createShatterPieces() {
