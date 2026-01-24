@@ -44,6 +44,18 @@
     .social-container a { color: #fff; font-size: 18px; margin: 0 10px; }
     .social-container a:hover { color: #ff66ff; }
 
+    #resume .btn-view {
+      font-size: 15px;
+      padding: 8px 22px;
+      box-shadow: 0 0 12px rgba(155, 48, 255, 0.6);
+    }
+    
+    #resume .btn-view:hover {
+      box-shadow: 0 0 22px rgba(191, 0, 255, 0.9);
+      transform: translateY(-2px);
+    }
+
+
     /* Projects */
     #projects {
       margin-bottom: 60px;
@@ -508,6 +520,23 @@ body {
         <a href="https://www.youtube.com/@anantabp6467" target="_blank"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
+        <!-- Resume Section -->
+    <section id="resume" class="section-card reveal" style="max-width: 600px; text-align: center;">
+      <h3 class="section-title">Resume</h3>
+      <p style="opacity: 0.9;">
+        View or download my resume to know more about my skills, experience, and projects.
+      </p>
+
+      <div class="d-flex justify-content-center gap-4 mt-4">
+        <a href="YOUR_RESUME_VIEW_LINK_HERE" target="_blank" class="btn-view">
+          <i class="fa fa-eye"></i> View
+        </a>
+        <a href="YOUR_RESUME_DOWNLOAD_LINK_HERE" download class="btn-view">
+          <i class="fa fa-download"></i> Download
+        </a>
+      </div>
+    </section>
+
 
     <!-- Projects Section -->
     <section id="projects" class="section-card reveal">
